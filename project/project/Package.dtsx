@@ -11,11 +11,77 @@
   DTS:LocaleID="1051"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="27"
-  DTS:VersionGUID="{717282FB-870E-4785-9716-D903F97667D0}">
+  DTS:VersionBuild="30"
+  DTS:VersionGUID="{C001B08D-DB6D-4D0A-8868-E9D32B299C1C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Flat File Connection Manager]"
+      DTS:CreationName="FLATFILE"
+      DTS:DTSID="{CA8A76D9-C459-4F91-906C-A9CC7B899C7D}"
+      DTS:ObjectName="Flat File Connection Manager">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:Format="Delimited"
+          DTS:LocaleID="1051"
+          DTS:HeaderRowsToSkip="1"
+          DTS:HeaderRowDelimiter="_x000D__x000A_"
+          DTS:ColumnNamesInFirstDataRow="True"
+          DTS:RowDelimiter=""
+          DTS:TextQualifier="_x003C_none_x003E_"
+          DTS:CodePage="65001"
+          DTS:ConnectionString="C:\Users\spasi\OneDrive\Dokumenty\GitHub\School\foundation-1\project\electricity_price.csv">
+          <DTS:FlatFileColumns>
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x003B_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="129"
+              DTS:TextQualified="True"
+              DTS:ObjectName="DateAvg"
+              DTS:DTSID="{B3C7BFA1-785E-4E13-91E8-8A61F3DE02D2}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x003B_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="129"
+              DTS:TextQualified="True"
+              DTS:ObjectName="PriceAvg"
+              DTS:DTSID="{58E80902-7F29-4723-A38E-7C7EAE5D2FD9}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x003B_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="129"
+              DTS:TextQualified="True"
+              DTS:ObjectName="Column 2"
+              DTS:DTSID="{53BB6DBE-5A3C-4D43-8B13-149625E77070}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x003B_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="129"
+              DTS:TextQualified="True"
+              DTS:ObjectName="DateMin"
+              DTS:DTSID="{B16269D2-5798-4149-822E-1A79EEE878A8}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x000D__x000A_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="129"
+              DTS:TextQualified="True"
+              DTS:ObjectName="PriceMin"
+              DTS:DTSID="{0803A59C-A732-4845-B711-89FBD77270BA}"
+              DTS:CreationName="" />
+          </DTS:FlatFileColumns>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE]"
       DTS:CreationName="OLEDB"
@@ -128,13 +194,67 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
-          DTS:refId="Package\Load All Tables\Data Flow Task"
+          DTS:refId="Package\Load All Tables\Get Input Table Name"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{4D809B15-9405-4F13-9073-26D6DC8AF7F8}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Input Table Name"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{D60F6DCE-BEFD-4C1D-98E5-9FD0E535A5DB}"
+              SQLTask:SqlStatementSource="SELECT table_name &#xA;FROM INFORMATION_SCHEMA.TABLES&#xA;ORDER BY table_name&#xA;OFFSET ? ROWS&#xA;FETCH NEXT 1 ROWS ONLY;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="TABLE_NAME"
+                SQLTask:DtsVariableName="User::InputTable" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::Skip"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="0" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load All Tables\Get Output Table Name"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{b4cdb5e6-9e34-42f6-8d7f-e492b88ed230}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Output Table Name"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{24CD9F82-4D11-4A45-8A97-FDD0A9AB73BC}"
+              SQLTask:SqlStatementSource="SELECT table_name &#xA;FROM INFORMATION_SCHEMA.TABLES&#xA;ORDER BY table_name&#xA;OFFSET ? ROWS&#xA;FETCH NEXT 1 ROWS ONLY;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="TABLE_NAME"
+                SQLTask:DtsVariableName="User::OutputTable" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::Skip"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="0" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load All Tables\Load Database data"
           DTS:CreationName="Microsoft.Pipeline"
           DTS:Description="Data Flow Task"
           DTS:DTSID="{AB868314-8285-4B5F-8F02-185FE3944572}"
           DTS:ExecutableType="Microsoft.Pipeline"
           DTS:LocaleID="-1"
-          DTS:ObjectName="Data Flow Task"
+          DTS:ObjectName="Load Database data"
           DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
           <DTS:Variables />
           <DTS:ObjectData>
@@ -142,7 +262,7 @@
               version="1">
               <components>
                 <component
-                  refId="Package\Load All Tables\Data Flow Task\Input Rows To Table"
+                  refId="Package\Load All Tables\Load Database data\Input Rows To Table"
                   componentClassID="Microsoft.OLEDBDestination"
                   contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
                   description="OLE DB Destination"
@@ -199,7 +319,7 @@
                   </properties>
                   <connections>
                     <connection
-                      refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Connections[OleDbConnection]"
+                      refId="Package\Load All Tables\Load Database data\Input Rows To Table.Connections[OleDbConnection]"
                       connectionManagerID="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE.StagingDatabase]"
                       connectionManagerRefId="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE.StagingDatabase]"
                       description="The OLE DB runtime connection used to access the database."
@@ -207,127 +327,127 @@
                   </connections>
                   <inputs>
                     <input
-                      refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input]"
+                      refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input]"
                       errorOrTruncationOperation="Insert"
                       errorRowDisposition="FailComponent"
                       hasSideEffects="true"
                       name="OLE DB Destination Input">
                       <inputColumns>
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[id]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[id]"
                           cachedDataType="i4"
                           cachedName="id"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[id]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[id]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[id]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Firstname]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Firstname]"
                           cachedCodepage="1252"
                           cachedDataType="str"
                           cachedLength="45"
                           cachedName="Firstname"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[firstname]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Firstname]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[firstname]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Firstname]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Lastname]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Lastname]"
                           cachedCodepage="1252"
                           cachedDataType="str"
                           cachedLength="45"
                           cachedName="Lastname"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[lastname]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Lastname]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[lastname]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Lastname]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Address]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Address]"
                           cachedCodepage="1252"
                           cachedDataType="str"
                           cachedLength="100"
                           cachedName="Address"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[address]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Address]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[address]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Address]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[ZipCode]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[ZipCode]"
                           cachedCodepage="1252"
                           cachedDataType="str"
                           cachedLength="45"
                           cachedName="ZipCode"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[zipcode]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[ZipCode]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[zipcode]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[ZipCode]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[City]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[City]"
                           cachedCodepage="1252"
                           cachedDataType="str"
                           cachedLength="45"
                           cachedName="City"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[city]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[City]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[city]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[City]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Email]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Email]"
                           cachedCodepage="1252"
                           cachedDataType="str"
                           cachedLength="45"
                           cachedName="Email"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[email]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Email]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[email]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Email]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Customer_id]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Customer_id]"
                           cachedDataType="i4"
                           cachedName="Customer_id"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[customer_id]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Customer_id]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[customer_id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Customer_id]" />
                         <inputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Country_id]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].Columns[Country_id]"
                           cachedDataType="i4"
                           cachedName="Country_id"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[country_id]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Country_id]" />
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[country_id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Country_id]" />
                       </inputColumns>
                       <externalMetadataColumns
                         isUsed="True">
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[id]"
                           dataType="i4"
                           name="id" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[firstname]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[firstname]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="firstname" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[lastname]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[lastname]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="lastname" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[address]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[address]"
                           codePage="1252"
                           dataType="str"
                           length="100"
                           name="address" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[zipcode]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[zipcode]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="zipcode" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[city]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[city]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="city" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[email]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[email]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="email" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[customer_id]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[customer_id]"
                           dataType="i4"
                           name="customer_id" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[country_id]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input].ExternalColumns[country_id]"
                           dataType="i4"
                           name="country_id" />
                       </externalMetadataColumns>
@@ -335,22 +455,22 @@
                   </inputs>
                   <outputs>
                     <output
-                      refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Outputs[OLE DB Destination Error Output]"
+                      refId="Package\Load All Tables\Load Database data\Input Rows To Table.Outputs[OLE DB Destination Error Output]"
                       exclusionGroup="1"
                       isErrorOut="true"
                       name="OLE DB Destination Error Output"
-                      synchronousInputId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input]">
+                      synchronousInputId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input]">
                       <outputColumns>
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          lineageId="Package\Load All Tables\Load Database data\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
                           name="ErrorCode"
                           specialFlags="1" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          refId="Package\Load All Tables\Load Database data\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          lineageId="Package\Load All Tables\Load Database data\Input Rows To Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
                           name="ErrorColumn"
                           specialFlags="2" />
                       </outputColumns>
@@ -359,7 +479,7 @@
                   </outputs>
                 </component>
                 <component
-                  refId="Package\Load All Tables\Data Flow Task\Load Rows From Table"
+                  refId="Package\Load All Tables\Load Database data\Load Rows From Table"
                   componentClassID="Microsoft.OLEDBSource"
                   contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
                   description="OLE DB Source"
@@ -408,7 +528,7 @@
                   </properties>
                   <connections>
                     <connection
-                      refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Connections[OleDbConnection]"
+                      refId="Package\Load All Tables\Load Database data\Load Rows From Table.Connections[OleDbConnection]"
                       connectionManagerID="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE.CompanyLtd]"
                       connectionManagerRefId="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE.CompanyLtd]"
                       description="The OLE DB runtime connection used to access the database."
@@ -416,227 +536,227 @@
                   </connections>
                   <outputs>
                     <output
-                      refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output]"
+                      refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output]"
                       name="OLE DB Source Output">
                       <outputColumns>
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[id]"
                           dataType="i4"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[id]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[id]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[id]"
                           name="id"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Firstname]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Firstname]"
                           codePage="1252"
                           dataType="str"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Firstname]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Firstname]"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Firstname]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Firstname]"
                           name="Firstname"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Lastname]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Lastname]"
                           codePage="1252"
                           dataType="str"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Lastname]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Lastname]"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Lastname]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Lastname]"
                           name="Lastname"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Address]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Address]"
                           codePage="1252"
                           dataType="str"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Address]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Address]"
                           length="100"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Address]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Address]"
                           name="Address"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[ZipCode]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[ZipCode]"
                           codePage="1252"
                           dataType="str"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[ZipCode]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[ZipCode]"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[ZipCode]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[ZipCode]"
                           name="ZipCode"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[City]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[City]"
                           codePage="1252"
                           dataType="str"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[City]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[City]"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[City]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[City]"
                           name="City"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Email]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Email]"
                           codePage="1252"
                           dataType="str"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Email]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Email]"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Email]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Email]"
                           name="Email"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Customer_id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Customer_id]"
                           dataType="i4"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Customer_id]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Customer_id]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Customer_id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Customer_id]"
                           name="Customer_id"
                           truncationRowDisposition="FailComponent" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Country_id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Country_id]"
                           dataType="i4"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
-                          externalMetadataColumnId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Country_id]"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Country_id]"
+                          externalMetadataColumnId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Country_id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].Columns[Country_id]"
                           name="Country_id"
                           truncationRowDisposition="FailComponent" />
                       </outputColumns>
                       <externalMetadataColumns
                         isUsed="True">
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[id]"
                           dataType="i4"
                           name="id" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Firstname]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Firstname]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="Firstname" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Lastname]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Lastname]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="Lastname" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Address]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Address]"
                           codePage="1252"
                           dataType="str"
                           length="100"
                           name="Address" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[ZipCode]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[ZipCode]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="ZipCode" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[City]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[City]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="City" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Email]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Email]"
                           codePage="1252"
                           dataType="str"
                           length="45"
                           name="Email" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Customer_id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Customer_id]"
                           dataType="i4"
                           name="Customer_id" />
                         <externalMetadataColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Country_id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output].ExternalColumns[Country_id]"
                           dataType="i4"
                           name="Country_id" />
                       </externalMetadataColumns>
                     </output>
                     <output
-                      refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output]"
+                      refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output]"
                       isErrorOut="true"
                       name="OLE DB Source Error Output">
                       <outputColumns>
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[id]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[id]"
                           name="id" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Firstname]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Firstname]"
                           codePage="1252"
                           dataType="str"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Firstname]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Firstname]"
                           name="Firstname" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Lastname]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Lastname]"
                           codePage="1252"
                           dataType="str"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Lastname]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Lastname]"
                           name="Lastname" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Address]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Address]"
                           codePage="1252"
                           dataType="str"
                           length="100"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Address]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Address]"
                           name="Address" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ZipCode]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ZipCode]"
                           codePage="1252"
                           dataType="str"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ZipCode]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ZipCode]"
                           name="ZipCode" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[City]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[City]"
                           codePage="1252"
                           dataType="str"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[City]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[City]"
                           name="City" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Email]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Email]"
                           codePage="1252"
                           dataType="str"
                           length="45"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Email]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Email]"
                           name="Email" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Customer_id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Customer_id]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Customer_id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Customer_id]"
                           name="Customer_id" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Country_id]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Country_id]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Country_id]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[Country_id]"
                           name="Country_id" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                           name="ErrorCode"
                           specialFlags="1" />
                         <outputColumn
-                          refId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          refId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
                           dataType="i4"
-                          lineageId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          lineageId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
                           name="ErrorColumn"
                           specialFlags="2" />
                       </outputColumns>
@@ -647,66 +767,12 @@
               </components>
               <paths>
                 <path
-                  refId="Package\Load All Tables\Data Flow Task.Paths[OLE DB Source Output]"
-                  endId="Package\Load All Tables\Data Flow Task\Input Rows To Table.Inputs[OLE DB Destination Input]"
+                  refId="Package\Load All Tables\Load Database data.Paths[OLE DB Source Output]"
+                  endId="Package\Load All Tables\Load Database data\Input Rows To Table.Inputs[OLE DB Destination Input]"
                   name="OLE DB Source Output"
-                  startId="Package\Load All Tables\Data Flow Task\Load Rows From Table.Outputs[OLE DB Source Output]" />
+                  startId="Package\Load All Tables\Load Database data\Load Rows From Table.Outputs[OLE DB Source Output]" />
               </paths>
             </pipeline>
-          </DTS:ObjectData>
-        </DTS:Executable>
-        <DTS:Executable
-          DTS:refId="Package\Load All Tables\Get Input Table Name"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Execute SQL Task"
-          DTS:DTSID="{4D809B15-9405-4F13-9073-26D6DC8AF7F8}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="Get Input Table Name"
-          DTS:ThreadHint="0">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{D60F6DCE-BEFD-4C1D-98E5-9FD0E535A5DB}"
-              SQLTask:SqlStatementSource="SELECT table_name &#xA;FROM INFORMATION_SCHEMA.TABLES&#xA;ORDER BY table_name&#xA;OFFSET ? ROWS&#xA;FETCH NEXT 1 ROWS ONLY;"
-              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-              <SQLTask:ResultBinding
-                SQLTask:ResultName="TABLE_NAME"
-                SQLTask:DtsVariableName="User::InputTable" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="0"
-                SQLTask:DtsVariableName="User::Skip"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="0" />
-            </SQLTask:SqlTaskData>
-          </DTS:ObjectData>
-        </DTS:Executable>
-        <DTS:Executable
-          DTS:refId="Package\Load All Tables\Get Output Table Name"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Execute SQL Task"
-          DTS:DTSID="{b4cdb5e6-9e34-42f6-8d7f-e492b88ed230}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="Get Output Table Name"
-          DTS:ThreadHint="0">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{24CD9F82-4D11-4A45-8A97-FDD0A9AB73BC}"
-              SQLTask:SqlStatementSource="SELECT table_name &#xA;FROM INFORMATION_SCHEMA.TABLES&#xA;ORDER BY table_name&#xA;OFFSET ? ROWS&#xA;FETCH NEXT 1 ROWS ONLY;"
-              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-              <SQLTask:ResultBinding
-                SQLTask:ResultName="TABLE_NAME"
-                SQLTask:DtsVariableName="User::OutputTable" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="0"
-                SQLTask:DtsVariableName="User::Skip"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="0" />
-            </SQLTask:SqlTaskData>
           </DTS:ObjectData>
         </DTS:Executable>
       </DTS:Executables>
@@ -726,8 +792,397 @@
           DTS:From="Package\Load All Tables\Get Output Table Name"
           DTS:LogicalAnd="True"
           DTS:ObjectName="Constraint 1"
-          DTS:To="Package\Load All Tables\Data Flow Task" />
+          DTS:To="Package\Load All Tables\Load Database data" />
       </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Excel Data"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{7EF7D69D-1254-40DF-BE27-6C44837EE937}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Excel Data"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Excel Data\Flat File Source"
+              componentClassID="Microsoft.FlatFileSource"
+              contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Flat File Source"
+              localeId="1051"
+              name="Flat File Source"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether zero-length columns are treated as null."
+                  name="RetainNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of an output column containing the file name. If no name is specified, no output column containing the file name will be generated."
+                  name="FileNameColumnName"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Excel Data\Flat File Source.Connections[FlatFileConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Flat File Connection Manager]"
+                  connectionManagerRefId="Package.ConnectionManagers[Flat File Connection Manager]"
+                  name="FlatFileConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output]"
+                  name="Flat File Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[DateAvg]"
+                      codePage="65001"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[DateAvg]"
+                      length="50"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[DateAvg]"
+                      name="DateAvg"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[PriceAvg]"
+                      codePage="65001"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[PriceAvg]"
+                      length="50"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[PriceAvg]"
+                      name="PriceAvg"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[Column 2]"
+                      codePage="65001"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Column 2]"
+                      length="50"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[Column 2]"
+                      name="Column 2"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[DateMin]"
+                      codePage="65001"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[DateMin]"
+                      length="50"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[DateMin]"
+                      name="DateMin"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[PriceMin]"
+                      codePage="65001"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[PriceMin]"
+                      length="50"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[PriceMin]"
+                      name="PriceMin"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[DateAvg]"
+                      codePage="65001"
+                      dataType="str"
+                      length="50"
+                      name="DateAvg" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[PriceAvg]"
+                      codePage="65001"
+                      dataType="str"
+                      length="50"
+                      name="PriceAvg" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Column 2]"
+                      codePage="65001"
+                      dataType="str"
+                      length="50"
+                      name="Column 2" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[DateMin]"
+                      codePage="65001"
+                      dataType="str"
+                      length="50"
+                      name="DateMin" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[PriceMin]"
+                      codePage="65001"
+                      dataType="str"
+                      length="50"
+                      name="PriceMin" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output]"
+                  isErrorOut="true"
+                  name="Flat File Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                      codePage="65001"
+                      dataType="text"
+                      description="Flat File Source Error Output Column"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                      name="Flat File Source Error Output Column" />
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Excel Data\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[extractedPrices]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=17.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">65001</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">true</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Excel Data\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE.StagingDatabase]"
+                  connectionManagerRefId="Package.ConnectionManagers[SAMUELPASIERB\SAMPASMSSQLSERVE.StagingDatabase]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[DateAvg]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="DateAvg"
+                      externalMetadataColumnId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateAvg]"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[DateAvg]" />
+                    <inputColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PriceAvg]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="PriceAvg"
+                      externalMetadataColumnId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PriceAvg]"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[PriceAvg]" />
+                    <inputColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[DateMin]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="DateMin"
+                      externalMetadataColumnId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateMin]"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[DateMin]" />
+                    <inputColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PriceMin]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="PriceMin"
+                      externalMetadataColumnId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PriceMin]"
+                      lineageId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output].Columns[PriceMin]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateAvg]"
+                      codePage="65001"
+                      dataType="str"
+                      length="100"
+                      name="DateAvg" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PriceAvg]"
+                      codePage="65001"
+                      dataType="str"
+                      length="100"
+                      name="PriceAvg" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateMin]"
+                      codePage="65001"
+                      dataType="str"
+                      length="100"
+                      name="DateMin" />
+                    <externalMetadataColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PriceMin]"
+                      codePage="65001"
+                      dataType="str"
+                      length="100"
+                      name="PriceMin" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Excel Data\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Excel Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Excel Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Excel Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Excel Data.Paths[Flat File Source Output]"
+              endId="Package\Load Excel Data\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Flat File Source Output"
+              startId="Package\Load Excel Data\Flat File Source.Outputs[Flat File Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
     </DTS:Executable>
   </DTS:Executables>
   <DTS:PrecedenceConstraints>
@@ -739,6 +1194,14 @@
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint"
       DTS:To="Package\Load All Tables" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{3E93AAD2-370A-4337-A98B-6A6792B3E14E}"
+      DTS:From="Package\Load All Tables"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Load Excel Data" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -751,11 +1214,23 @@
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="140,41.6"
+          Id="Package\Count Tables"
+          TopLeft="171.428571793498,162.741176461874" />
+        <NodeLayout
+          Size="172,41.6"
+          Id="Package\Load All Tables\Load Database data"
+          TopLeft="16.6000003299543,178.035293685307" />
         <NodeLayout
           Size="183.2,41.6"
           Id="Package\Load All Tables\Get Input Table Name"
           TopLeft="13.028571750923,5.16470563099256" />
+        <NodeLayout
+          Size="190.4,41.6"
+          Id="Package\Load All Tables\Get Output Table Name"
+          TopLeft="4.4571431612481,97.4117644136339" />
         <EdgeLayout
           Id="Package\Load All Tables.PrecedenceConstraints[Constraint]"
           TopLeft="102.142857456086,46.7647056309926">
@@ -778,24 +1253,49 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="190.4,41.6"
-          Id="Package\Load All Tables\Get Output Table Name"
-          TopLeft="4.4571431612481,97.4117644136339" />
         <EdgeLayout
           Id="Package\Load All Tables.PrecedenceConstraints[Constraint 1]"
-          TopLeft="103.58571461947,139.011764413634">
+          TopLeft="101.128571745601,139.011764413634">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,39.0235292716732"
+              EndConnector="0,39.0235292716731"
               Start="0,0"
-              End="0,31.5235292716732">
+              End="0,31.5235292716731">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,31.5235292716732" />
+                    End="0,31.5235292716731" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="209.6,274.4"
+          Size="209.6,317.6"
+          Id="Package\Load All Tables"
+          TopLeft="138.571428866411,270.411764630139" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="242.400000329955,204.341176461874">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,66.070588168265"
+              Start="0,0"
+              End="0,58.570588168265">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,58.570588168265" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -805,34 +1305,23 @@
           </EdgeLayout.Labels>
         </EdgeLayout>
         <NodeLayout
-          Size="150.4,41.6"
-          Id="Package\Load All Tables\Data Flow Task"
-          TopLeft="32.3142860776916,178.035293685307" />
-        <ContainerLayout
-          HeaderHeight="43"
-          IsExpanded="True"
-          PanelSize="201.6,235.2"
-          Size="201.6,278.4"
-          Id="Package\Load All Tables"
-          TopLeft="138.571428866411,270.411764630139" />
-        <NodeLayout
-          Size="140,41.6"
-          Id="Package\Count Tables"
-          TopLeft="171.428571793498,162.741176461874" />
+          Size="153.6,41.6"
+          Id="Package\Load Excel Data"
+          TopLeft="162.857143203823,612.599999601175" />
         <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="240.400000329954,204.341176461874">
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="241.514286035117,588.011764630139">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,66.0705881682648"
+              EndConnector="0,24.5882349710357"
               Start="0,0"
-              End="0,58.5705881682648">
+              End="0,17.0882349710357">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,58.5705881682648" />
+                    End="0,17.0882349710357" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -845,20 +1334,20 @@
     </LayoutInfo>
   </Package>
   <TaskHost
-    design-time-name="Package\Load All Tables\Data Flow Task">
+    design-time-name="Package\Load All Tables\Load Database data">
     <LayoutInfo>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="186.4,41.6"
-          Id="Package\Load All Tables\Data Flow Task\Load Rows From Table"
+          Id="Package\Load All Tables\Load Database data\Load Rows From Table"
           TopLeft="140.000000298023,69.5882352331209" />
         <NodeLayout
           Size="176.8,41.6"
-          Id="Package\Load All Tables\Data Flow Task\Input Rows To Table"
+          Id="Package\Load All Tables\Load Database data\Input Rows To Table"
           TopLeft="142.857143161248,181.99999984047" />
         <EdgeLayout
-          Id="Package\Load All Tables\Data Flow Task.Paths[OLE DB Source Output]"
+          Id="Package\Load All Tables\Load Database data.Paths[OLE DB Source Output]"
           TopLeft="232.228571729636,111.188235233121">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -883,7 +1372,7 @@
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Load All Tables\Data Flow Task\Load Rows From Table">
+    design-time-name="Package\Load All Tables\Load Database data\Input Rows To Table">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -896,7 +1385,58 @@
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Load All Tables\Data Flow Task\Input Rows To Table">
+    design-time-name="Package\Load All Tables\Load Database data\Load Rows From Table">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Excel Data">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150.4,41.6"
+          Id="Package\Load Excel Data\Flat File Source"
+          TopLeft="182.857143246398,77.99999993163" />
+        <NodeLayout
+          Size="170.4,41.6"
+          Id="Package\Load Excel Data\OLE DB Destination"
+          TopLeft="168.571428930273,162.882352798404" />
+        <EdgeLayout
+          Id="Package\Load Excel Data.Paths[Flat File Source Output]"
+          TopLeft="255.914286088335,119.59999993163">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,43.2823528667738"
+              Start="0,0"
+              End="0,35.7823528667738">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.7823528667738" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Excel Data\OLE DB Destination">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

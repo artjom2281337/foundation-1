@@ -1,11 +1,11 @@
-USE StagingDatabase;
+USE StagingDatabase
 
 CREATE TABLE dbo.extractedPricesClean(
 DateAvg DATE NOT NULL,
 PriceAvg DECIMAL(10,2) NOT NULL,
 DateMin DATE NOT NULL,
 PriceMin DECIMAL(10,2) NOT NULL
-);
+)
 
 INSERT INTO dbo.extractedPricesClean(DateAvg, PriceAvg, DateMin, PriceMin)
 SELECT 

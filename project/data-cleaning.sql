@@ -1,25 +1,22 @@
 USE StagingDatabase
-
+GO
 SET DATEFORMAT DMY;
+GO
+DROP TABLE IF EXISTS dbo.extractedPricesClean
+GO
 
 CREATE TABLE dbo.extractedPricesClean(
 DateAvg DATE NOT NULL,
 PriceAvg DECIMAL(10,2) NOT NULL,
-DateMin DATE NOT NULL,
 PriceMin DECIMAL(10,2) NOT NULL
 )
+GO
 
-INSERT INTO dbo.extractedPricesClean(DateAvg, PriceAvg, DateMin, PriceMin)
+INSERT INTO dbo.extractedPricesClean(DateAvg, PriceAvg, PriceMin)
 SELECT 
 TRY_CAST(REPLACE(DateAvg, '.','-') AS DATE),
-TRY_CAST(REPLACE(PriceAvg,',','.') AS DECIMAL(10,2)),
-TRY_CAST(REPLACE(DateMin, '.', '-') AS DATE),
-TRY_CAST(REPLACE(PriceMin, ',', '.') AS DECIMAL(10,2))
+ISNULL(TRY_CAST(REPLACE(PriceAvg,',','.') AS DECIMAL(10,2)), 0),
+ISNULL(TRY_CAST(REPLACE(PriceMin, ',', '.') AS DECIMAL(10,2)), 0)
 FROM dbo.extractedPrices
 WHERE 
-ISDATE(DateAvg) = 1 
-AND TRY_CAST(REPLACE(PriceAvg,',','.') AS DECIMAL(10,2)) IS NOT NULL 
-AND TRY_CAST(REPLACE(PriceMin, ',', '.') AS DECIMAL(10,2)) IS NOT NULL;	
-
--- SELECT * FROM extractedPricesClean;
--- DROP TABLE extractedPricesClean;
+ISDATE(DateAvg) = 1;
